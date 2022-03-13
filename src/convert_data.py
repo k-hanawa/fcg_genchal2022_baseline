@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import spacy
 import bisect
+from itertools import accumulate
 from tqdm import tqdm
+import sentencepiece as spm
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', '-i', type=str)
     parser.add_argument('--output-prefix', '-o', type=str)
+    parser.add_argument('--spm-model', '-m', type=str)
     parser.add_argument('--test', action='store_true')
     args = parser.parse_args()
 
-    nlp = spacy.load("en_core_web_sm")
+    sp = spm.SentencePieceProcessor(model_file=args.spm_model)
 
     with open(args.input) as fi,\
          open(args.output_prefix + '.src', 'w') as fo_src,\
@@ -24,18 +26,19 @@ def main():
                 comment = 'dummy'
             else:
                 source, offset, comment = line.rstrip('\n').split('\t')
-            doc_s = nlp(source)
-            doc_c = nlp(comment)
+            source_toks = source.split(' ')
+            comment_toks = sp.encode(comment, out_type=str)
 
             si, ei = offset.split(':')
             si, ei = si.strip(), ei.strip()
             si, ei = int(si), int(ei)
-            idxs = [t.idx for t in doc_s]
+            source_tok_lens = [len(t) for t in source_toks]
+            idxs = [j + sl for j, sl in enumerate(accumulate([0] + source_tok_lens))]
             siw = bisect.bisect_left(idxs, si)
             eiw = bisect.bisect_left(idxs, ei)
 
-            fo_src.write('{}\n'.format(' '.join(t.lower_ for t in doc_s)))
-            fo_com.write('{}\n'.format(' '.join(t.lower_ for t in doc_c)))
+            fo_src.write('{}\n'.format(' '.join(t for t in source_toks)))
+            fo_com.write('{}\n'.format(' '.join(t for t in comment_toks)))
             fo_err.write('{} {}\n'.format(siw, eiw))
 
 
