@@ -33,7 +33,7 @@ $ fairseq-train \
     --optimizer adam --lr 0.001 \
     --max-tokens 1024 --max-epoch 50 \
     --eval-bleu --eval-bleu --best-checkpoint-metric bleu \
-    --maximize-best-checkpoint-metric\
+    --maximize-best-checkpoint-metric \
     --user-dir src \
     --save-dir results/fcg_baseline
 ```
