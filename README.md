@@ -53,6 +53,8 @@ $ python src/postprocess.py -i data/train_dev/DEV.prep_feedback_comment.public.t
 ```
 
 ### Evaluate
+
+## Automatic evaluation based on BLEU
 Compute precision, recall and f1 score based on sentence BLEU using [SacreBLEU](https://github.com/mjpost/sacrebleu).
 You should provide **detokenized** system outputs file.
 ```bash
@@ -61,7 +63,7 @@ BLEU precision: 46.341357634752534
 BLEU recall: 46.341357634752534
 BLEU F1: 46.341357634752534
 ```
-`--verbose/-v` option shows the system output length, the reference length and the bleu score of each sentence.
+
 ```bash
 $ python src/evaluate_bleu.py -i results/fcg_baseline/DEV.prep_feedback_comment.out.tsv -r data/train_dev/DEV.prep_feedback_comment.public.tsv -v
 ...
@@ -76,4 +78,33 @@ Reference length: 170
 BLEU precision: 46.341357634752534
 BLEU recall: 46.341357634752534
 BLEU F1: 46.341357634752534
+```
+
+## Summarize results of manual evaluation
+
+Summarize the final results based on the manual evaluation.
+Input is an xlsx file containing the manual evaluation results.
+
+```bash
+$ python src/evaluate.py -i results/manual_evaluation/DEV.prep_feedback_comment.public.xlsx
+-------
+Basic stats
+-------
+Input file: results/manual_evaluation/DEV.prep_feedback_comment.public.xlsx
+Num of reference feedback comments: 215
+Num of generated feedback comments: 212
+Num of generated <NO_COMMENT>: 0
+-------
+Manual evaluation
+-------
+Precision: 0.428 (92 / 215)
+Recall: 0.428 (92 / 215)
+F1: 0.428
+-------
+BLEU
+-------
+Precision: 0.463
+Recall: 0.463
+F1: 0.463
+-------
 ```
