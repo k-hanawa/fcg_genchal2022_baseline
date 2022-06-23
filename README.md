@@ -54,7 +54,7 @@ $ python src/postprocess.py -i data/train_dev/DEV.prep_feedback_comment.public.t
 
 ### Evaluate
 
-## Automatic evaluation based on BLEU
+#### Automatic evaluation based on BLEU
 Compute precision, recall and f1 score based on sentence BLEU using [SacreBLEU](https://github.com/mjpost/sacrebleu).
 You should provide **detokenized** system outputs file.
 ```bash
@@ -80,7 +80,7 @@ BLEU recall: 46.341357634752534
 BLEU F1: 46.341357634752534
 ```
 
-## Summarize results of manual evaluation
+#### Summarize results of manual evaluation
 
 Summarize the final results based on the manual evaluation.
 Input is an xlsx file containing the manual evaluation results.
